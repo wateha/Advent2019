@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
 
     DataFileReader dataFileReader(argv[1], ',', 'i');
 	
-	size_t index = 0;
+	int index = 0;
 	OpCodeHandler opCodeHandler(dataFileReader.GetIntegerData()[0]);
     if (argc > 2) {
         opCodeHandler.SetOpCodeInput(std::stoi(argv[2]));

@@ -29,13 +29,13 @@
 class OpCodeHandler
 {
 public:
-	OpCodeHandler(std::vector<int> inputVector) { opCodeProgramInput = inputVector; };
-	
+    OpCodeHandler(std::vector<int> inputVector) { opCodeProgramInput = inputVector; };
+
     // Execute instructions at given position; return new position
-    size_t OpCodeInstruction(size_t);
+    int OpCodeInstruction(int);
 
     // Get program result
-	int GetOpCodeResult();
+    int GetOpCodeResult();
 
     // Set program input
     void SetOpCodeInput(int);
@@ -44,25 +44,25 @@ private:
     std::vector<int> opCodeProgramInput{};
 
     // Read the opcode data structure (OpCode and parameter modes)
-	void OpCodeParser(int);
+    void OpCodeParser(int);
 
     // Set parameter values depending on modes
-    void OpCodeCheckParameterModes(std::vector<int>&, size_t);
+    void OpCodeCheckParameterModes(std::vector<int>&, int);
 
     // OpCode: 1 - ADD
-    void OpCodeAdd(size_t, int, int, int);
+    void OpCodeAdd(int, int, int, int);
     // OpCode: 2 - MULTIPLY
-    void OpCodeMultiply(size_t, int, int, int);
+    void OpCodeMultiply(int, int, int, int);
     // OpCode: 3 - INPUT
-	void OpCodeInput(size_t, int);
+    void OpCodeInput(int, int);
     // OpCode: 4 - OUTPUT
-	void OpCodeOutput(size_t, int);
+    void OpCodeOutput(int, int);
     // OpCode: 5 - JUMP_IF_TRUE
-    size_t OpCodeJumpIfTrue(size_t, int, int);
+    int OpCodeJumpIfTrue(int, int, int);
     // OpCode: 6 - JUMP_IF_FALSE
-    size_t OpCodeJumpIfFalse(size_t, int, int);
+    int OpCodeJumpIfFalse(int, int, int);
     // OpCode: 7 - LESS_THAN
-    void OpCodeLessThan(size_t, int, int, int);
+    void OpCodeLessThan(int, int, int, int);
     // OpCode: 8 - EQUAL
-    void OpCodeEqual(size_t, int, int, int);
+    void OpCodeEqual(int, int, int, int);
 };
