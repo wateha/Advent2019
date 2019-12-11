@@ -42,7 +42,7 @@ std::vector <std::vector <int>> DataFileReader::IntDataInput(std::vector <std::s
     for (size_t dataStringCounter = 0; dataStringCounter < dataString.size(); dataStringCounter++) {
         size_t pos = 0;
         std::vector <int> dataVector;
-        while (dataString[dataStringCounter].find(delimiter) != std::string::npos) {
+        while ((pos= dataString[dataStringCounter].find(delimiter)) != std::string::npos) {
             int data = std::stoi(dataString[dataStringCounter].substr(0, pos));
             dataVector.push_back(data);
             dataString[dataStringCounter].erase(0, pos + 1);
@@ -61,7 +61,7 @@ std::vector <std::vector <std::string>> DataFileReader::StrDataInput(std::vector
     for (size_t dataStringCounter = 0; dataStringCounter < dataString.size(); dataStringCounter++) {
         size_t pos = 0;
         std::vector <std::string> dataVector;
-        while (dataString[dataStringCounter].find(delimiter) != std::string::npos) {
+        while ((pos = dataString[dataStringCounter].find(delimiter)) != std::string::npos) {
             std::string data = dataString[dataStringCounter].substr(0, pos);
             dataVector.push_back(data);
             dataString[dataStringCounter].erase(0, pos + 1);

@@ -152,9 +152,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AdventCalendar.cpp" />
+    <ClCompile Include="DataFileReader.cpp" />
     <ClCompile Include="OpCodeHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DataFileReader.h" />
     <ClInclude Include="OpCodeHandler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -21,9 +21,15 @@
     <ClCompile Include="OpCodeHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DataFileReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpCodeHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DataFileReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
