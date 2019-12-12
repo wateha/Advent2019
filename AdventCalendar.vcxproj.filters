@@ -24,12 +24,24 @@
     <ClCompile Include="DataFileReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OrbitingPlanet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Orbits.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpCodeHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DataFileReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OrbitingPlanet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Orbits.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

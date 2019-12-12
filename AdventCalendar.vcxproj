@@ -154,10 +154,14 @@
     <ClCompile Include="AdventCalendar.cpp" />
     <ClCompile Include="DataFileReader.cpp" />
     <ClCompile Include="OpCodeHandler.cpp" />
+    <ClCompile Include="OrbitingPlanet.cpp" />
+    <ClCompile Include="Orbits.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataFileReader.h" />
     <ClInclude Include="OpCodeHandler.h" />
+    <ClInclude Include="OrbitingPlanet.h" />
+    <ClInclude Include="Orbits.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
