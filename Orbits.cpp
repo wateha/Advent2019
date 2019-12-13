@@ -1,10 +1,4 @@
 #include "Orbits.h"
-/*
-bool GetPlanetWithID(OrbitingPlanet* planet) {
-    std::string ID = "DOM";
-    return (planet->GetPlanetID() == ID);
-
-}*/
 
 Orbits::Orbits(std::vector <std::vector <std::string>> connections) {
 
@@ -25,9 +19,6 @@ void Orbits::AddConnection(std::string centre, std::string satellite) {
     // Check if each planet exist
     int posCentre = GetPlanetWithID(centre);
     int posSatellite = GetPlanetWithID(satellite);
-
-    //int posCentre = GetPlanetWithPredicate(GetPlanetWithID);
-    //int posSatellite = GetPlanetWithPredicate(GetPlanetWithID);
 
     // If centre exists
     if (posCentre >= 0)

@@ -24,7 +24,6 @@ private:
 
     // Find the index of the planet with provided ID in orbitingPlanets vetor
     int GetPlanetWithID(std::string planet);
-    //int GetPlanetWithPredicate(bool (*getID)(OrbitingPlanet*));
 
     // Calculate planet's distance from innermost planet (Centre Of Mass)
     void SetPlanetsPosition();
