@@ -1,12 +1,13 @@
 #include "DataFileReader.h"
 
 DataFileReader::DataFileReader(std::string fileName, char delimiter, DataType dataType) {
+    DataFileInput(fileName);
     switch (dataType) {
     case DataType::INT:
-        integerDataVector = IntDataInput(DataFileInput(fileName), delimiter);
+        IntDataInput(delimiter);
         break;
     case DataType::STR:
-        stringDataVector = StrDataInput(DataFileInput(fileName), delimiter);
+        StrDataInput(delimiter);
         break;
     default:
         break;
@@ -14,72 +15,59 @@ DataFileReader::DataFileReader(std::string fileName, char delimiter, DataType da
 }
 
 // Read input file and load to vector
-std::vector<std::string>* DataFileReader::DataFileInput(std::string fileName) {
+void DataFileReader::DataFileInput(std::string fileName) {
 
     // Read file input
     std::ifstream inputDataFile;
-    std::vector<std::string>* dataInputVector = new  std::vector<std::string>();
-    
+
     // Get data input
     inputDataFile.open(fileName);
     while (inputDataFile.eof() == 0) {
         std::string data;
         inputDataFile >> data;
-        dataInputVector->push_back(data);
+        dataInputVector.push_back(data);
     }
     inputDataFile.close();
-
-    return dataInputVector;
 }
 
 // Split input data to integers
-std::vector <std::vector <int>>* DataFileReader::IntDataInput(std::vector <std::string>* dataString, char delimiter) {
-
-    std::vector <std::vector <int>> *outputVector  = new std::vector <std::vector <int>>{};
-
-    for (size_t dataStringCounter = 0; dataStringCounter < dataString->size(); dataStringCounter++) {
+void DataFileReader::IntDataInput(char delimiter) {
+    for (size_t dataStringCounter = 0; dataStringCounter < dataInputVector.size(); dataStringCounter++) {
         size_t pos = 0;
         std::vector <int> dataVector;
-        while ((pos= (*dataString)[dataStringCounter].find(delimiter)) != std::string::npos) {
-            int data = std::stoi((*dataString)[dataStringCounter].substr(0, pos));
+        while ((pos = dataInputVector[dataStringCounter].find(delimiter)) != std::string::npos) {
+            int data = std::stoi(dataInputVector[dataStringCounter].substr(0, pos));
             dataVector.push_back(data);
-            (*dataString)[dataStringCounter].erase(0, pos + 1);
+            dataInputVector[dataStringCounter].erase(0, pos + 1);
         }
-        outputVector -> push_back(dataVector);
+        integerDataVector.push_back(dataVector);
     }
-
-    return outputVector;
 }
 
 // Split input data to strings
-std::vector <std::vector <std::string>>* DataFileReader::StrDataInput(std::vector <std::string>* dataString, char delimiter) {
-
-    std::vector <std::vector <std::string>>* outputVector = new  std::vector <std::vector <std::string>>;
-
-    for (size_t dataStringCounter = 0; dataStringCounter < dataString->size(); dataStringCounter++) {
+void DataFileReader::StrDataInput(char delimiter) {
+    for (size_t dataStringCounter = 0; dataStringCounter < dataInputVector.size(); dataStringCounter++) {
         size_t pos = 0;
         std::vector <std::string> dataVector;
         while (true) {
-            pos = (*dataString)[dataStringCounter].find(delimiter);
-            std::string data = (*dataString)[dataStringCounter].substr(0, pos);
+            pos = dataInputVector[dataStringCounter].find(delimiter);
+            std::string data = dataInputVector[dataStringCounter].substr(0, pos);
             dataVector.push_back(data);
-            (*dataString)[dataStringCounter].erase(0, pos + 1);
+            dataInputVector[dataStringCounter].erase(0, pos + 1);
             if (pos == std::string::npos) {
                 break;
             }
         }
-        outputVector -> push_back(dataVector);
+        stringDataVector.push_back(dataVector);
     }
-
-    return outputVector;
 }
 
 // Integer data access
-std::vector <std::vector <int>>* DataFileReader::GetIntegerData() {
+const std::vector <std::vector <int>>& DataFileReader::GetIntegerData() {
     return integerDataVector;
 }
 
 // String data access
-std::vector <std::vector <std::string>>* DataFileReader::GetStringData() {
+const std::vector <std::vector <std::string>>& DataFileReader::GetStringData() {
     return stringDataVector;
 }
