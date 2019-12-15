@@ -1,14 +1,12 @@
 #include "OpCodeHandler.h"
 
-int programInput = 1;
-int programOutput = 0;
-int instructionTable[] = { 0, 0, 0, 0, 0 };
+
 
 int OpCodeHandler::OpCodeInstruction(int vectorIndex) {
-    OpCodeParser(opCodeProgramInput[vectorIndex]);
+    OpCodeParser(opCodeProgram[vectorIndex]);
     int opCodeInstructionID = instructionTable[0] + 10 * instructionTable[1];
     int newIndex = 0;
-
+    outputReady = false;
     switch (opCodeInstructionID) {
     case 1:
         OpCodeAdd(vectorIndex, instructionTable[4], instructionTable[3], instructionTable[2]);
@@ -21,6 +19,7 @@ int OpCodeHandler::OpCodeInstruction(int vectorIndex) {
         return vectorIndex + 2;
     case 4:
         OpCodeOutput(vectorIndex, instructionTable[2]);
+        outputReady = true;
         return vectorIndex + 2;
     case 5:
         return OpCodeJumpIfTrue(vectorIndex, instructionTable[3], instructionTable[2]);
@@ -45,90 +44,97 @@ void OpCodeHandler::OpCodeParser(int opCodeInstruction) {
 }
 
 void OpCodeHandler::OpCodeAdd(int vectorIndex, int parameterModeA, int parameterModeB, int parameterModeC) {
-    // std::vector<int> param = { parameterModeA, parameterModeB, parameterModeC };
-    // OpCodeCheckParameterModes(param, vectorIndex);
-    // opCodeProgramInput[param[0]] = opCodeProgramInput[param[1]] + opCodeProgramInput[param[2]];
-
     int parameterA, parameterB, parameterC;
 
-    parameterA = parameterModeA ? (vectorIndex + 3) : opCodeProgramInput[vectorIndex + 3];
-    parameterB = parameterModeB ? (vectorIndex + 2) : opCodeProgramInput[vectorIndex + 2];
-    parameterC = parameterModeC ? (vectorIndex + 1) : opCodeProgramInput[vectorIndex + 1];
+    parameterA = parameterModeA ? (vectorIndex + 3) : opCodeProgram[vectorIndex + 3];
+    parameterB = parameterModeB ? (vectorIndex + 2) : opCodeProgram[vectorIndex + 2];
+    parameterC = parameterModeC ? (vectorIndex + 1) : opCodeProgram[vectorIndex + 1];
 
-    opCodeProgramInput[parameterA] = opCodeProgramInput[parameterB] + opCodeProgramInput[parameterC];
+    opCodeProgram[parameterA] = opCodeProgram[parameterB] + opCodeProgram[parameterC];
 
 }
 
 void OpCodeHandler::OpCodeMultiply(int vectorIndex, int parameterModeA, int parameterModeB, int parameterModeC) {
     int parameterA, parameterB, parameterC;
 
-    parameterA = parameterModeA ? (vectorIndex + 3) : opCodeProgramInput[vectorIndex + 3];
-    parameterB = parameterModeB ? (vectorIndex + 2) : opCodeProgramInput[vectorIndex + 2];
-    parameterC = parameterModeC ? (vectorIndex + 1) : opCodeProgramInput[vectorIndex + 1];
+    parameterA = parameterModeA ? (vectorIndex + 3) : opCodeProgram[vectorIndex + 3];
+    parameterB = parameterModeB ? (vectorIndex + 2) : opCodeProgram[vectorIndex + 2];
+    parameterC = parameterModeC ? (vectorIndex + 1) : opCodeProgram[vectorIndex + 1];
 
-    opCodeProgramInput[parameterA] = opCodeProgramInput[parameterB] * opCodeProgramInput[parameterC];
+    opCodeProgram[parameterA] = opCodeProgram[parameterB] * opCodeProgram[parameterC];
 }
 
 void OpCodeHandler::OpCodeInput(int vectorIndex, int parameterMode) {
     int parameter;
-    parameter = parameterMode ? (vectorIndex + 1) : opCodeProgramInput[vectorIndex + 1];
-    opCodeProgramInput[parameter] = programInput;
+    parameter = parameterMode ? (vectorIndex + 1) : opCodeProgram[vectorIndex + 1];
+    if (opCodeInputIndex < opCodeProgramInput.size()) {
+        opCodeProgram[parameter] = opCodeProgramInput[opCodeInputIndex];
+        opCodeInputIndex++;
+    }
+    else {
+        opCodeProgram[parameter] = 0;
+    }
 }
 
 void OpCodeHandler::OpCodeOutput(int vectorIndex, int parameterMode) {
     int parameter;
-    parameter = parameterMode ? (vectorIndex + 1) : opCodeProgramInput[vectorIndex + 1];
-    programOutput = opCodeProgramInput[parameter];
+    parameter = parameterMode ? (vectorIndex + 1) : opCodeProgram[vectorIndex + 1];
+    programOutput = opCodeProgram[parameter];
 }
 
 int OpCodeHandler::OpCodeJumpIfTrue(int vectorIndex, int parameterModeB, int parameterModeC) {
     int parameterB, parameterC;
     int newIndex;
-    parameterB = parameterModeB ? (vectorIndex + 2) : opCodeProgramInput[vectorIndex + 2];
-    parameterC = parameterModeC ? (vectorIndex + 1) : opCodeProgramInput[vectorIndex + 1];
+    parameterB = parameterModeB ? (vectorIndex + 2) : opCodeProgram[vectorIndex + 2];
+    parameterC = parameterModeC ? (vectorIndex + 1) : opCodeProgram[vectorIndex + 1];
 
-    return newIndex = opCodeProgramInput[parameterC] ? opCodeProgramInput[parameterB] : (vectorIndex + 3);
+    return newIndex = opCodeProgram[parameterC] ? opCodeProgram[parameterB] : (vectorIndex + 3);
 }
 
 int OpCodeHandler::OpCodeJumpIfFalse(int vectorIndex, int parameterModeB, int parameterModeC) {
     int parameterB, parameterC;
     int newIndex;
-    parameterB = parameterModeB ? (vectorIndex + 2) : opCodeProgramInput[vectorIndex + 2];
-    parameterC = parameterModeC ? (vectorIndex + 1) : opCodeProgramInput[vectorIndex + 1];
+    parameterB = parameterModeB ? (vectorIndex + 2) : opCodeProgram[vectorIndex + 2];
+    parameterC = parameterModeC ? (vectorIndex + 1) : opCodeProgram[vectorIndex + 1];
 
-    return newIndex = opCodeProgramInput[parameterC] ? (vectorIndex + 3) : opCodeProgramInput[parameterB];
+    return newIndex = opCodeProgram[parameterC] ? (vectorIndex + 3) : opCodeProgram[parameterB];
 }
 
 void OpCodeHandler::OpCodeLessThan(int vectorIndex, int parameterModeA, int parameterModeB, int parameterModeC) {
     int parameterA, parameterB, parameterC;
 
-    parameterA = parameterModeA ? (vectorIndex + 3) : opCodeProgramInput[vectorIndex + 3];
-    parameterB = parameterModeB ? (vectorIndex + 2) : opCodeProgramInput[vectorIndex + 2];
-    parameterC = parameterModeC ? (vectorIndex + 1) : opCodeProgramInput[vectorIndex + 1];
+    parameterA = parameterModeA ? (vectorIndex + 3) : opCodeProgram[vectorIndex + 3];
+    parameterB = parameterModeB ? (vectorIndex + 2) : opCodeProgram[vectorIndex + 2];
+    parameterC = parameterModeC ? (vectorIndex + 1) : opCodeProgram[vectorIndex + 1];
 
-    opCodeProgramInput[parameterA] = (opCodeProgramInput[parameterB] > opCodeProgramInput[parameterC]) ? 1 : 0;
+    opCodeProgram[parameterA] = (opCodeProgram[parameterB] > opCodeProgram[parameterC]) ? 1 : 0;
 }
 
 void OpCodeHandler::OpCodeEqual(int vectorIndex, int parameterModeA, int parameterModeB, int parameterModeC) {
     int parameterA, parameterB, parameterC;
 
-    parameterA = parameterModeA ? (vectorIndex + 3) : opCodeProgramInput[vectorIndex + 3];
-    parameterB = parameterModeB ? (vectorIndex + 2) : opCodeProgramInput[vectorIndex + 2];
-    parameterC = parameterModeC ? (vectorIndex + 1) : opCodeProgramInput[vectorIndex + 1];
+    parameterA = parameterModeA ? (vectorIndex + 3) : opCodeProgram[vectorIndex + 3];
+    parameterB = parameterModeB ? (vectorIndex + 2) : opCodeProgram[vectorIndex + 2];
+    parameterC = parameterModeC ? (vectorIndex + 1) : opCodeProgram[vectorIndex + 1];
 
-    opCodeProgramInput[parameterA] = (opCodeProgramInput[parameterB] == opCodeProgramInput[parameterC]) ? 1 : 0;
+    opCodeProgram[parameterA] = (opCodeProgram[parameterB] == opCodeProgram[parameterC]) ? 1 : 0;
 }
 
 int OpCodeHandler::GetOpCodeResult() {
     return programOutput;
 }
 
-void OpCodeHandler::SetOpCodeInput(int input) {
-    programInput = input;
+void OpCodeHandler::SetOpCodeInputIndex(int index) {
+    opCodeInputIndex = index;
+}
+
+void OpCodeHandler::SetOpCodeInput(std::vector<int> inputVector) {
+    opCodeProgramInput = inputVector;
+    opCodeInputIndex = 0;
 }
 
 void OpCodeHandler::OpCodeCheckParameterModes(std::vector<int>& parameters, int index) {
     for (int i = 0; i < parameters.size(); i++) {
-        parameters[i] = parameters[i] ? (index + 1 + i) : opCodeProgramInput[index + 1 + i];
+        parameters[i] = parameters[i] ? (index + 1 + i) : opCodeProgram[index + 1 + i];
     }
 }

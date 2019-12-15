@@ -29,7 +29,32 @@
 class OpCodeHandler
 {
 public:
-    OpCodeHandler(std::vector<int> inputVector) { opCodeProgramInput = inputVector; };
+    OpCodeHandler(std::vector<int> inputVector) { SetOpCodeDataStream(inputVector); };
+
+    // Set program data stream
+    void SetOpCodeDataStream(std::vector<int> dataStream) { opCodeProgram.clear();  opCodeProgram = dataStream; };
+
+    // Run program with given inputs and data stream
+    bool RunOpCodeProgramOnStream(std::vector<int> dataStream, std::vector<int> inputVector) {
+        SetOpCodeDataStream(dataStream);
+        SetOpCodeInput(inputVector);
+        int index = 0;
+        do {
+            index = OpCodeInstruction(index);
+        } while (index > 0);
+
+        return true;
+    }
+
+    bool RunOpCodeProgram(std::vector<int> inputVector) {
+        SetOpCodeInput(inputVector);
+        int index = 0;
+        do {
+            index = OpCodeInstruction(index);
+        } while (index > 0);
+
+        return true;
+    }
 
     // Execute instructions at given position; return new position
     int OpCodeInstruction(int);
@@ -38,11 +63,24 @@ public:
     int GetOpCodeResult();
 
     // Set program input
-    void SetOpCodeInput(int);
+    void SetOpCodeInput(std::vector<int> inputVector);
+
+    // Set program input index
+    void SetOpCodeInputIndex(int index);
+
+    bool IsOpCodeOutputReady() { return outputReady; }
 
 private:
-    std::vector<int> opCodeProgramInput{};
 
+    bool outputReady = false;
+
+    int programInput = 1;
+    int programOutput = 0;
+    int instructionTable[5] = { 0, 0, 0, 0, 0 };
+
+    std::vector<int> opCodeProgram{};
+    std::vector<int> opCodeProgramInput{};
+    int opCodeInputIndex = 0;
     // Read the opcode data structure (OpCode and parameter modes)
     void OpCodeParser(int);
 

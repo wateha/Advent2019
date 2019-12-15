@@ -17,8 +17,8 @@ Orbits::Orbits(std::vector <std::vector <std::string>> connections) {
 
 void Orbits::AddConnection(std::string centre, std::string satellite) {
     // Check if each planet exist
-    int posCentre = GetPlanetWithID(centre);
-    int posSatellite = GetPlanetWithID(satellite);
+    int posCentre = GetPlanetWithID(centre, *orbitingPlanets);
+    int posSatellite = GetPlanetWithID(satellite, *orbitingPlanets);
 
     // If centre exists
     if (posCentre >= 0)
@@ -56,18 +56,14 @@ void Orbits::AddConnection(std::string centre, std::string satellite) {
     }
 }
 
-//int Orbits::GetPlanetWithPredicate(bool (*getID)(OrbitingPlanet*)) {
-int Orbits::GetPlanetWithID(std::string planet) {
-    for (int i = 0; i < (*orbitingPlanets).size(); i++) {
-        //if(getID((*orbitingPlanets)[i])){
-        if ((*orbitingPlanets)[i]->GetPlanetID() == planet) {
+int Orbits::GetPlanetWithID(std::string planet, std::vector<OrbitingPlanet*> planetList) {
+    for (int i = 0; i < planetList.size(); i++) {
+        if (planetList[i]->GetPlanetID() == planet) {
             return i;
         }
     }
     return -1;
 }
-
-
 
 void Orbits::SetPlanetsPosition() {
     for (int i = 0; i < (*orbitingPlanets).size(); i++) {
@@ -96,4 +92,41 @@ int Orbits::NextPlanet(OrbitingPlanet* planet) {
 
 int Orbits::GetSum(){
     return sum;
+}
+
+// Find distance between two planets
+int Orbits::GetOrbitDifference(std::string planetA, std::string planetB){
+    
+    std::vector <std::string> planetTrail{};
+
+    OrbitingPlanet *newPlanet = (*orbitingPlanets)[GetPlanetWithID(planetA, *orbitingPlanets)]->GetCentrePlanet();
+    
+    // Get planet trail from planet's A centre to the Centre Of Mass
+    while (newPlanet != nullptr) {
+        planetTrail.push_back(newPlanet->GetPlanetID());
+        newPlanet = newPlanet->GetCentrePlanet();
+    }
+
+    newPlanet = (*orbitingPlanets)[GetPlanetWithID(planetB, *orbitingPlanets)]->GetCentrePlanet();
+    while (newPlanet != nullptr){
+        int pos = GetStringFormVector(newPlanet->GetPlanetID(), planetTrail);
+        if (pos < 0) {
+            planetTrail.push_back(newPlanet->GetPlanetID());
+        }
+        else {
+            planetTrail.erase(planetTrail.begin() + pos);
+        }
+        newPlanet = newPlanet->GetCentrePlanet();
+    }
+
+    return planetTrail.size();
+}
+
+int Orbits::GetStringFormVector(std::string ID, std::vector<std::string> planetList) {
+    for (int i = 0; i < planetList.size(); i++) {
+        if (planetList[i] == ID) {
+            return i;
+        }
+    }
+    return -1;
 }
