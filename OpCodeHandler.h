@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <iostream>
+#include <fstream>
 
 /* OpCode
 * Program reads from data vector intDataInput, then processes the whole program, starting at intDataInput[0].
@@ -30,9 +31,25 @@ class OpCodeHandler
 {
 public:
     OpCodeHandler(std::vector<int> inputVector) { SetOpCodeDataStream(inputVector); };
-
+    OpCodeHandler() {};
     // Set program data stream
     void SetOpCodeDataStream(std::vector<int> dataStream) { opCodeProgram.clear();  opCodeProgram = dataStream; };
+    
+    void ReturnTable() {
+        // Read file input
+        std::ofstream inputDataFile{};
+        // Get data input
+        if (!inputDataFile.is_open()) {
+            inputDataFile.open("programOut.txt", std::ofstream::app);
+        }
+        inputDataFile << "Program table:\n";
+        //std::cout << "Program table:\n";
+        for (int i = 0; i < opCodeProgram.size(); i++) {
+            inputDataFile << opCodeProgram[i] << ", ";
+        }
+        inputDataFile << "\n";
+        inputDataFile.close();
+    }
 
     // Run program with given inputs and data stream
     bool RunOpCodeProgramOnStream(std::vector<int> dataStream, std::vector<int> inputVector) {

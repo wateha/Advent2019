@@ -1,13 +1,19 @@
 #include "DataFileReader.h"
 
 DataFileReader::DataFileReader(std::string fileName, char delimiter, DataType dataType) {
+    // Read data file
     DataFileInput(fileName);
+    
+    // Parse data streams as selected data type with delimiter
     switch (dataType) {
     case DataType::INT:
         IntDataInput(delimiter);
         break;
     case DataType::STR:
         StrDataInput(delimiter);
+        break;
+    case DataType::FLOAT:
+        FloatDataInput(delimiter);
         break;
     default:
         break;
@@ -62,6 +68,20 @@ void DataFileReader::StrDataInput(char delimiter) {
     }
 }
 
+// Split input data to floats
+void DataFileReader::FloatDataInput(char delimiter) {
+    for (size_t dataStringCounter = 0; dataStringCounter < dataInputVector.size(); dataStringCounter++) {
+        size_t pos = 0;
+        std::vector <float> dataVector;
+        while ((pos = dataInputVector[dataStringCounter].find(delimiter)) != std::string::npos) {
+            float data = std::stof(dataInputVector[dataStringCounter].substr(0, pos));
+            dataVector.push_back(data);
+            dataInputVector[dataStringCounter].erase(0, pos + 1);
+        }
+        floatDataVector.push_back(dataVector);
+    }
+}
+
 // Integer data access
 const std::vector <std::vector <int>>& DataFileReader::GetIntegerData() {
     return integerDataVector;
@@ -70,4 +90,9 @@ const std::vector <std::vector <int>>& DataFileReader::GetIntegerData() {
 // String data access
 const std::vector <std::vector <std::string>>& DataFileReader::GetStringData() {
     return stringDataVector;
+}
+
+// Float data access
+const std::vector <std::vector <float>>& DataFileReader::GetFloatData() {
+    return floatDataVector;
 }
